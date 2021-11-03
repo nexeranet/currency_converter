@@ -1,6 +1,7 @@
-# currency_converter
+# Carrcency Converter API Client(Coingecko, Whattomine) for Go
+
 ## Usage
-For usage, checkout [Example folder](/example/)
+For usage, checkout [Example folder](https://github.com/nexeranet/currency_converter/tree/main/examples)
 ```go
 package main
 
