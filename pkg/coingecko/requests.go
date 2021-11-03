@@ -18,3 +18,7 @@ func (c *Coingecko) SimpleSinglePrice(name, currency string) (*types.SimpleSingl
 func (c *Coingecko) SimplePrice(names, currencies []string) (*map[string]map[string]float32, error) {
 	return c.Client.SimplePrice(names, currencies)
 }
+
+func (c *Coingecko) Ping() (*types.Ping, error) {
+	return c.Client.Ping()
+}

@@ -40,7 +40,9 @@ func (w *WhatToMineApi) Get(path string) ([]byte, error) {
 		return result, err
 	}
 	if res.StatusCode != http.StatusOK {
-		return result, fmt.Errorf("Status code : %d", res.StatusCode)
+		return result, &WError{
+			Err: fmt.Errorf("Status code : %d", res.StatusCode),
+		}
 	}
 	content, err := ioutil.ReadAll(res.Body)
 	defer res.Body.Close()

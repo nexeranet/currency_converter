@@ -15,11 +15,11 @@ func main() {
 		fmt.Println(err.Error())
 	}
 	fmt.Println(price)
-	prices, err := converter.GetPricesInGroups([]string{"BTC"}, []string{"ETH"})
+	prices, err := converter.GetPricesInGroups([]string{"BTC"}, []string{"ETH", "USD"})
 	if err != nil {
 		fmt.Println(err.Error())
 	}
 	fmt.Println(prices)
-	time.Sleep(5 * time.Minute)
+	time.Sleep(10 * time.Minute)
 	fmt.Println("END")
 }

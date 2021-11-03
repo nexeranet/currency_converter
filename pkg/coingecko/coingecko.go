@@ -13,16 +13,19 @@ import (
 )
 
 const (
-	packageName string = "COINGECKOAPI"
+	packageName        string = "COINGECKOAPI"
+	CoinsInterval      int    = 1000
+	DictionaryInterval int    = 1
 )
 
 var logInfo = log.New(os.Stdout, fmt.Sprintf("%s\t", packageName), log.Ldate|log.Ltime|log.Lshortfile)
 
 type Coingecko struct {
-	VsCurrencies ConversionDictionary
-	Coins        CoinsMap
-	Client       *cg.Client
-	Ticker       *time.Ticker
+	VsCurrencies    ConversionDictionary
+	Coins           CoinsMap
+	Client          *cg.Client
+	TickerCoins     *time.Ticker
+	TickerDictonary *time.Ticker
 }
 
 func NewCoingecko() *Coingecko {
@@ -50,6 +53,30 @@ func (c *Coingecko) Setup(wg *sync.WaitGroup) {
 	}
 }
 
+func (c *Coingecko) CreateTickers() {
+	c.TickerDictonary = time.NewTicker(time.Duration(DictionaryInterval) * time.Minute)
+	go func() {
+		for range c.TickerDictonary.C {
+			ping, err := c.Ping()
+			if err != nil {
+				logInfo.Printf(err.Error())
+				continue
+			}
+			logInfo.Printf("GeckoSays, %s", ping.GeckoSays)
+			err = c.UpdateConvertiesDictionary()
+			if err != nil {
+				logInfo.Printf(err.Error())
+				return
+			}
+			err = c.UpdateCoins()
+			if err != nil {
+				logInfo.Printf(err.Error())
+				return
+			}
+		}
+	}()
+}
+
 func (c *Coingecko) UpdateCoins() error {
 	coins, err := c.CoinsList()
 	if err != nil {
@@ -66,7 +93,7 @@ func (c *Coingecko) UpdateCoins() error {
 		}
 	}
 	c.Coins = dictonary
-	logInfo.Println("Coins dictonary is updated")
+	logInfo.Printf("Coins dictonary is updated, len - %d \n", len(dictonary))
 	return nil
 }
 func (c *Coingecko) UpdateConvertiesDictionary() error {
@@ -81,7 +108,7 @@ func (c *Coingecko) UpdateConvertiesDictionary() error {
 		dictonary[strings.ToUpper(value)] = value
 	}
 	c.VsCurrencies = dictonary
-	logInfo.Println("VsCurrencies dictonary is updated")
+	logInfo.Printf("VsCurrencies dictonary is updated, len - %d \n", len(dictonary))
 	return nil
 }
 
@@ -143,8 +170,9 @@ func (c *Coingecko) GetPricesInGroups(names, conversts []string) (PricesMap, err
 	for key, map_prices := range *data {
 		id := namesMap[key]
 		prices[id] = make(map[string]float32)
-		for m_id, price := map_prices {
-
+		for m_id, price := range map_prices {
+			id_c := converstsMap[m_id]
+			prices[id][id_c] = price
 		}
 	}
 	return prices, nil

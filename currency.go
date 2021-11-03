@@ -22,10 +22,12 @@ func NewConverter() *Converter {
 
 func (c *Converter) Setup() {
 	var wg sync.WaitGroup
-	wg.Add(1)
+	wg.Add(2)
 	go c.CoingeckoApi.Setup(&wg)
-	//go c.WhattomineApi.Setup(&wg)
+	go c.WhattomineApi.Setup(&wg)
 	wg.Wait()
+	c.WhattomineApi.CreateTickers()
+	c.CoingeckoApi.CreateTickers()
 	fmt.Println("###################\t Setup is done \t##########################")
 }
 

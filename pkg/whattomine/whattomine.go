@@ -10,7 +10,9 @@ import (
 )
 
 const (
-	packageName string = "WHATTOMINEAPI"
+	packageName    string = "WHATTOMINEAPI"
+	Interval       int    = 800
+	MinuteInterval int    = 2
 )
 
 var logInfo = log.New(os.Stdout, fmt.Sprintf("%s\t", packageName), log.Ldate|log.Ltime|log.Lshortfile)
@@ -42,11 +44,10 @@ func (w *WhatToMineApi) Setup(wg *sync.WaitGroup) {
 		return
 	}
 	w.UpdateCoins()
-	w.CreateTicker()
 }
 
-func (w *WhatToMineApi) CreateTicker() {
-	w.Ticker = time.NewTicker(1 * time.Minute)
+func (w *WhatToMineApi) CreateTickers() {
+	w.Ticker = time.NewTicker(time.Duration(MinuteInterval) * time.Minute)
 	go func() {
 		for range w.Ticker.C {
 			err := w.UpdateDictionary()
@@ -62,7 +63,7 @@ func (w *WhatToMineApi) CreateTicker() {
 func (w *WhatToMineApi) UpdateCoins() {
 	logInfo.Println("Update coins started")
 	for _, value := range w.Dictionary {
-		time.Sleep(600 * time.Millisecond)
+		time.Sleep(time.Duration(Interval) * time.Millisecond)
 		coin, err := w.GetCoinById(value.Id)
 		if err != nil {
 			logInfo.Printf("Error can't get coin - %s:%d, %s", value.Tag, value.Id, err.Error())
@@ -90,7 +91,7 @@ func (w *WhatToMineApi) UpdateDictionary() error {
 		}
 		dictionary[value.Tag] = value
 	}
-	logInfo.Printf("Dictionary length - %d", len(dictionary))
+	logInfo.Printf("Dictionary length - %d, time  %d seconds(approximately)", len(dictionary), (len(dictionary)*Interval)/1000)
 	w.SetDictionary(dictionary)
 	return nil
 }
