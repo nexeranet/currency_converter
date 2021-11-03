@@ -1,5 +1,7 @@
 # Carrcency Converter API Client(Coingecko, Whattomine) for Go
-
+## Resurses
+Coingecko [link](https://www.coingecko.com/ru/api/documentation)
+Whattomine [link](https://whattomine.com/coins)
 ## Usage
 For usage, checkout [Example folder](https://github.com/nexeranet/currency_converter/tree/main/examples)
 ```go
