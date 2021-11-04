@@ -1,4 +1,4 @@
-# Carrcency Converter API Client(Coingecko, Whattomine) for Go
+# Currency Converter API Client(Coingecko, Whattomine) for Go
 ## Resurses
 Coingecko [link](https://www.coingecko.com/ru/api/documentation)  
 Whattomine [link](https://whattomine.com/coins)  
