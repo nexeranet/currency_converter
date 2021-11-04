@@ -1,0 +1,22 @@
+{
+  "coins": {
+    "0xBitcoin": {
+      "id": 315,
+      "tag": "0xBTC",
+      "algorithm": "SHA3Solidity",
+      "lagging": true,
+      "listed": false,
+      "status": "Active",
+      "testing": false
+    },
+    "365Coin": {
+      "id": 74,
+      "tag": "365",
+      "algorithm": "Keccak",
+      "lagging": true,
+      "listed": false,
+      "status": "No available stats",
+      "testing": false
+    }
+  }
+}

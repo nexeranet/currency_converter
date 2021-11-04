@@ -31,37 +31,42 @@ type Calculators struct {
 type Coin struct {
 	Id               int         `json:"id"`
 	Tag              string      `json:"tag"`
-	Name             string      `json:"name"`
+	Name             string      `json:"name,omitempty"`
 	Algorithm        string      `json:"algorithm"`
 	BlockTime        json.Number `json:"block_time"`
 	BlockReward      float32     `json:"block_reward"`
 	BlockReward24    float32     `json:"block_reward24"`
-	BlockReward3     float32     `json:"block_reward3"`
-	BlockReward7     float32     `json:"block_reward7"`
+	BlockReward3     float32     `json:"block_reward3,omitempty"`
+	BlockReward7     float32     `json:"block_reward7,omitempty"`
 	LastBlock        float32     `json:"last_block"`
 	Difficulty       float32     `json:"difficulty"`
 	Difficulty24     float32     `json:"difficulty24"`
-	Difficulty3      float32     `json:"difficulty3"`
-	Difficulty7      float32     `json:"difficulty7"`
+	Difficulty3      float32     `json:"difficulty3,omitempty"`
+	Difficulty7      float32     `json:"difficulty7,omitempty"`
 	Nethash          float64     `json:"nethash"`
 	ExchangeRate     float32     `json:"exchange_rate"`
 	ExchangeRate24   float32     `json:"exchange_rate24"`
-	ExchangeRate3    float32     `json:"exchange_rate3"`
-	ExchangeRate7    float32     `json:"exchange_rate7"`
+	ExchangeRate3    float32     `json:"exchange_rate3,omitempty"`
+	ExchangeRate7    float32     `json:"exchange_rate7,omitempty"`
 	ExchangeRateVol  float32     `json:"exchange_rate_vol"`
 	ExchangeRateCurr string      `json:"exchange_rate_curr"`
 	MarketCap        string      `json:"market_cap"`
-	PoolFee          string      `json:"pool_fee"`
-	EstimatedRewards string      `json:"estimated_rewards"`
+	PoolFee          string      `json:"pool_fee,omitempty"`
+	EstimatedRewards string      `json:"estimated_rewards,omitempty"`
 	BtcRevenue       string      `json:"btc_revenue,omitempty"`
-	Revenue          string      `json:"revenue"`
-	Cost             string      `json:"cost"`
-	Profit           string      `json:"profit"`
-	Status           string      `json:"status"`
-	Lagging          bool        `json:"lagging"`
-	Testing          bool        `json:"testing"`
-	Listed           bool        `json:"listed"`
-	Timestamp        int32       `json:"timestamp"`
+	Revenue          string      `json:"revenue,omitempty"`
+	Cost             string      `json:"cost,omitempty"`
+	Profit           string      `json:"profit,omitempty"`
+	Status           string      `json:"status,omitempty"`
+	Lagging          bool        `json:"lagging,omitempty"`
+	Testing          bool        `json:"testing,omitempty"`
+	Listed           bool        `json:"listed,omitempty"`
+	Timestamp        int32       `json:"timestamp,omitempty"`
+
+	EstimatedRewards24 string `json:"estimated_rewards24,omitempty"`
+	BtcRevenue24       string `json:"btc_revenue24,omitempty"`
+	Profitability      int    `json:"profitability,omitempty"`
+	Profitability24    int    `json:"profitability24,omitempty"`
 }
 
 type WError struct {

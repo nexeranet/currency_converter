@@ -20,6 +20,11 @@ func main() {
 		fmt.Println(err.Error())
 	}
 	fmt.Println(prices)
+	coins, err := converter.WhattomineApi.GetCoins()
+	if err != nil {
+		fmt.Println(err.Error())
+	}
+	fmt.Println(coins)
 	time.Sleep(10 * time.Minute)
 	fmt.Println("END")
 }

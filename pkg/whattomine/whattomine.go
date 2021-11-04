@@ -13,6 +13,7 @@ const (
 	packageName    string = "WHATTOMINEAPI"
 	Interval       int    = 800
 	MinuteInterval int    = 2
+	URL            string = "https://whattomine.com"
 )
 
 var logInfo = log.New(os.Stdout, fmt.Sprintf("%s\t", packageName), log.Ldate|log.Ltime|log.Lshortfile)
@@ -27,7 +28,7 @@ type WhatToMineApi struct {
 
 func NewWhatToMineApi() *WhatToMineApi {
 	return &WhatToMineApi{
-		Url: "https://whattomine.com",
+		Url: URL,
 		Client: &http.Client{
 			Timeout: 6 * time.Second,
 		},

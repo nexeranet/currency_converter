@@ -1,0 +1,29 @@
+{
+  "coins": {
+    "Ethereum": {
+      "id": 151,
+      "tag": "ETH",
+      "algorithm": "Ethash",
+      "block_time": "13.5815",
+      "block_reward": 2.24481498837968,
+      "block_reward24": 2.22371827913691,
+      "last_block": 13550567,
+      "difficulty": 10258652886885388,
+      "difficulty24": 10417894079951800,
+      "nethash": 755340197097919,
+      "exchange_rate": 0.073304,
+      "exchange_rate24": 0.0731101432584269,
+      "exchange_rate_vol": 5806.47714241,
+      "exchange_rate_curr": "BTC",
+      "market_cap": "$533,901,324,234.07",
+      "estimated_rewards": "0.0017",
+      "estimated_rewards24": "0.00166",
+      "btc_revenue": "0.00012473",
+      "btc_revenue24": "0.00012167",
+      "profitability": 100,
+      "profitability24": 100,
+      "lagging": false,
+      "timestamp": 1636033543
+    }
+  }
+}
