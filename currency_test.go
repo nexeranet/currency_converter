@@ -23,7 +23,8 @@ func RunSetup() {
 		setUpIsDone = true
 	}
 }
-func TestGetNetInfo(t *testing.T) {
+
+func Cleanup(t *testing.T) {
 	t.Cleanup(func() {
 		gock.EnableNetworking()
 		gock.OffAll()
@@ -31,6 +32,10 @@ func TestGetNetInfo(t *testing.T) {
 	gock.DisableNetworking()
 
 	RunSetup()
+}
+
+func TestGetNetInfo(t *testing.T) {
+	Cleanup(t)
 
 	type input struct {
 		tag string
@@ -147,12 +152,7 @@ func TestGetNetInfo(t *testing.T) {
 }
 
 func TestGetPrice(t *testing.T) {
-	t.Cleanup(func() {
-		gock.EnableNetworking()
-		gock.OffAll()
-	})
-	gock.DisableNetworking()
-	RunSetup()
+	Cleanup(t)
 
 	type input struct {
 		currency  string
@@ -260,12 +260,7 @@ func TestGetPrice(t *testing.T) {
 }
 
 func TestGetPricesInGroups(t *testing.T) {
-	t.Cleanup(func() {
-		gock.EnableNetworking()
-		gock.OffAll()
-	})
-	gock.DisableNetworking()
-	RunSetup()
+	Cleanup(t)
 
 	type input struct {
 		currency  []string

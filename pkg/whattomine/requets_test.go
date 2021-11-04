@@ -315,3 +315,74 @@ func TestGetCalculators(t *testing.T) {
 		})
 	}
 }
+
+func TestGet(t *testing.T) {
+	Cleanup(t)
+	type output struct {
+		res     []byte
+		withErr bool
+	}
+	type input struct {
+		path string
+	}
+	type test struct {
+		name   string
+		setup  func()
+		input  input
+		output output
+	}
+
+	tests := []test{
+		{
+			name: "200",
+			setup: func() {
+				gock.New(URL).
+					Get("coins/1.json").
+					Reply(http.StatusOK).
+					BodyString("Done")
+			},
+			input: input{
+				path: "coins/1.json",
+			},
+			output: output{
+				res: []byte("Done"),
+			},
+		},
+		{
+			name: "500",
+			setup: func() {
+				gock.New(URL).
+					Get("calculators.json").
+					Reply(http.StatusInternalServerError)
+			},
+			output: output{
+				withErr: true,
+			},
+		},
+		{
+			name: "403",
+			setup: func() {
+				gock.New(URL).
+					Get("calculators.json").
+					Reply(http.StatusForbidden)
+			},
+			output: output{
+				withErr: true,
+			},
+		},
+	}
+
+	for _, tt := range tests {
+		tt := tt
+		t.Run(tt.name, func(t *testing.T) {
+			tt.setup()
+			actualRes, actualErr := API.Get(tt.input.path)
+			if (actualErr != nil) != tt.output.withErr {
+				t.Fatalf("expected error %t, actual %s", tt.output.withErr, actualErr)
+			}
+			if !cmp.Equal(tt.output.res, actualRes) {
+				t.Fatalf("expected output do not match\n%s", cmp.Diff(tt.output.res, actualRes))
+			}
+		})
+	}
+}
