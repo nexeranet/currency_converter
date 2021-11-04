@@ -39,12 +39,12 @@ func (w *WhatToMineApi) Get(path string) ([]byte, error) {
 	if err != nil {
 		return result, err
 	}
+	content, err := ioutil.ReadAll(res.Body)
 	if res.StatusCode != http.StatusOK {
 		return result, &WError{
-			Err: fmt.Errorf("Status code : %d", res.StatusCode),
+			Err: fmt.Errorf("Status code : %d, Response - %s", res.StatusCode, string(content)),
 		}
 	}
-	content, err := ioutil.ReadAll(res.Body)
 	defer res.Body.Close()
 	if err != nil {
 		return result, err
@@ -63,17 +63,4 @@ func (w *WhatToMineApi) GetCalculators() (Calculators, error) {
 		return calc, err
 	}
 	return calc, nil
-}
-
-func (w *WhatToMineApi) GetCoinByTag(tag string) (Coin, error) {
-	var result Coin
-	calc, ok := w.Dictionary[tag]
-	if !ok {
-		return result, fmt.Errorf("Not found in whotomine dictionary - %s", tag)
-	}
-	coin, err := w.GetCoinById(calc.Id)
-	if err != nil {
-		return result, err
-	}
-	return coin, nil
 }

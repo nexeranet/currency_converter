@@ -10,7 +10,7 @@ import (
 func main() {
 	converter := currency_converter.NewConverter()
 	converter.Setup()
-	price, err := converter.GetPrice("BTC", "USD")
+	price, err := converter.GetPrice("BTC", "ETHasdfsa")
 	if err != nil {
 		fmt.Println(err.Error())
 	}

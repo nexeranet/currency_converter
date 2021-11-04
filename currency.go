@@ -31,9 +31,24 @@ func (c *Converter) Setup() {
 	fmt.Println("###################\t Setup is done \t##########################")
 }
 
+// WHATTOMINEAPI
 func (c *Converter) GetNetInfo(tag string) (whattomine.Coin, error) {
 	return c.WhattomineApi.GetNetInfo(tag)
 }
+
+// func (c *Converter) GetWhattomineCalculators() (whattomine.Calculators, error) {
+// return c.WhattomineApi.GetCalculators()
+// }
+//
+// func (c *Converter) GetWhattomineCoins() (whattomine.Coins, error) {
+// return c.WhattomineApi.GetCoins()
+// }
+//
+// func (c *Converter) GetWhattomineCoinById(id int) (whattomine.Coin, error) {
+// return c.WhattomineApi.GetCoinById(id)
+// }
+
+// COINGECKOAPI
 
 func (c *Converter) GetPrice(name, convert_name string) (float32, error) {
 	return c.CoingeckoApi.GetPrice(name, convert_name)

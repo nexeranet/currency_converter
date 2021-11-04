@@ -15,6 +15,11 @@ func main() {
 		fmt.Println(err.Error())
 	}
 	fmt.Println(coin)
+	res, err := converter.WhattomineApi.GetCoinById(123)
+	if err != nil {
+		fmt.Println(err.Error())
+	}
+	fmt.Println(res)
 	time.Sleep(1 * time.Minute)
 	fmt.Println("END")
 }

@@ -43,7 +43,7 @@ func (w *WhatToMineApi) Setup(wg *sync.WaitGroup) {
 		logInfo.Println("Error: ")
 		return
 	}
-	w.UpdateCoins()
+	//w.UpdateCoins()
 }
 
 func (w *WhatToMineApi) CreateTickers() {
@@ -55,7 +55,7 @@ func (w *WhatToMineApi) CreateTickers() {
 				logInfo.Printf("Error in Ticker goroutine, %s", err.Error())
 				return
 			}
-			w.UpdateCoins()
+			//w.UpdateCoins()
 		}
 	}()
 }
@@ -107,5 +107,18 @@ func (w *WhatToMineApi) FindCoinByTag(tag string) (Coin, error) {
 }
 
 func (w *WhatToMineApi) GetNetInfo(tag string) (Coin, error) {
-	return w.FindCoinByTag(tag)
+	return w.GetCoinByTag(tag)
+}
+
+func (w *WhatToMineApi) GetCoinByTag(tag string) (Coin, error) {
+	var result Coin
+	calc, ok := w.Dictionary[tag]
+	if !ok {
+		return result, fmt.Errorf("Not found in whotomine dictionary - %s", tag)
+	}
+	coin, err := w.GetCoinById(calc.Id)
+	if err != nil {
+		return result, err
+	}
+	return coin, nil
 }
