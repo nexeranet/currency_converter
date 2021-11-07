@@ -15,7 +15,7 @@ import (
 const (
 	packageName        string = "COINGECKOAPI"
 	CoinsInterval      int    = 1000
-	DictionaryInterval int    = 1
+	DictionaryInterval int    = 5
 )
 
 var logInfo = log.New(os.Stdout, fmt.Sprintf("%s\t", packageName), log.Ldate|log.Ltime|log.Lshortfile)

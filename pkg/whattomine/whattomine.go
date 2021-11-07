@@ -11,8 +11,7 @@ import (
 
 const (
 	packageName    string = "WHATTOMINEAPI"
-	Interval       int    = 800
-	MinuteInterval int    = 2
+	MinuteInterval int    = 5
 	URL            string = "https://whattomine.com"
 )
 
@@ -23,7 +22,6 @@ type WhatToMineApi struct {
 	Url        string
 	Dictionary CalculatorsMap
 	Ticker     *time.Ticker
-	Coins      CoinsMap
 }
 
 func NewWhatToMineApi() *WhatToMineApi {
@@ -33,7 +31,6 @@ func NewWhatToMineApi() *WhatToMineApi {
 			Timeout: 6 * time.Second,
 		},
 		Dictionary: make(CalculatorsMap),
-		Coins:      make(CoinsMap),
 	}
 }
 
@@ -44,7 +41,6 @@ func (w *WhatToMineApi) Setup(wg *sync.WaitGroup) {
 		logInfo.Println("Error: ")
 		return
 	}
-	//w.UpdateCoins()
 }
 
 func (w *WhatToMineApi) CreateTickers() {
@@ -56,24 +52,8 @@ func (w *WhatToMineApi) CreateTickers() {
 				logInfo.Printf("Error in Ticker goroutine, %s", err.Error())
 				return
 			}
-			//w.UpdateCoins()
 		}
 	}()
-}
-
-func (w *WhatToMineApi) UpdateCoins() {
-	logInfo.Println("Update coins started")
-	for _, value := range w.Dictionary {
-		time.Sleep(time.Duration(Interval) * time.Millisecond)
-		coin, err := w.GetCoinById(value.Id)
-		if err != nil {
-			logInfo.Printf("Error can't get coin - %s:%d, %s", value.Tag, value.Id, err.Error())
-			continue
-		} else {
-			w.Coins[coin.Tag] = coin
-		}
-	}
-	logInfo.Println("Update coins finished")
 }
 
 func (w *WhatToMineApi) SetDictionary(dictionary CalculatorsMap) {
@@ -92,19 +72,9 @@ func (w *WhatToMineApi) UpdateDictionary() error {
 		}
 		dictionary[value.Tag] = value
 	}
-	logInfo.Printf("Dictionary length - %d, time  %d seconds(approximately)", len(dictionary), (len(dictionary)*Interval)/1000)
+	logInfo.Printf("Dictionary length - %d", len(dictionary))
 	w.SetDictionary(dictionary)
 	return nil
-}
-
-func (w *WhatToMineApi) FindCoinByTag(tag string) (Coin, error) {
-	coin, ok := w.Coins[tag]
-	if !ok {
-		return Coin{}, &WError{
-			Err: fmt.Errorf("Not found in dictionary - %s", tag),
-		}
-	}
-	return coin, nil
 }
 
 func (w *WhatToMineApi) GetCoinByTag(tag string) (Coin, error) {
