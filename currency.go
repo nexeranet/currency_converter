@@ -41,6 +41,10 @@ func (c *Converter) CreateTickers() {
 	c.WhattomineApi.CreateTickers()
 	c.CoingeckoApi.CreateTickers()
 }
+func (c *Converter) StopTickers() {
+	c.WhattomineApi.Ticker.Stop()
+	c.CoingeckoApi.Ticker.Stop()
+}
 
 // WHATTOMINEAPI
 func (c *Converter) GetNetInfo(tag string) (whattomine.Coin, error) {

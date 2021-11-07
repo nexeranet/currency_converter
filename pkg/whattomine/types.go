@@ -3,6 +3,7 @@ package whattomine
 import (
 	"encoding/json"
 	"fmt"
+	"sync"
 )
 
 type CoinsMap map[string]Coin
@@ -75,4 +76,28 @@ type WError struct {
 
 func (w *WError) Error() string {
 	return fmt.Sprintf("%s : %s", packageName, w.Err)
+}
+
+type Dictionary struct {
+	Mutex sync.Mutex
+	Data  CalculatorsMap
+}
+
+func (d *Dictionary) Get(tag string) (Calculator, bool) {
+	d.Mutex.Lock()
+	defer d.Mutex.Unlock()
+	calc, ok := d.Data[tag]
+	return calc, ok
+}
+
+func (d *Dictionary) Set(tag string, calc Calculator) {
+	d.Mutex.Lock()
+	defer d.Mutex.Unlock()
+	d.Data[tag] = calc
+}
+
+func (d *Dictionary) Swap(dict CalculatorsMap) {
+	d.Mutex.Lock()
+	defer d.Mutex.Unlock()
+	d.Data = dict
 }

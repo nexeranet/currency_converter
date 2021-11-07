@@ -21,11 +21,10 @@ const (
 var logInfo = log.New(os.Stdout, fmt.Sprintf("%s\t", packageName), log.Ldate|log.Ltime|log.Lshortfile)
 
 type Coingecko struct {
-	VsCurrencies    ConversionDictionary
-	Coins           CoinsMap
-	Client          *cg.Client
-	TickerCoins     *time.Ticker
-	TickerDictonary *time.Ticker
+	VsCurrencies *DictionaryConversion
+	Coins        *DictionaryCoins
+	Client       *cg.Client
+	Ticker       *time.Ticker
 }
 
 func NewCoingecko() *Coingecko {
@@ -33,8 +32,12 @@ func NewCoingecko() *Coingecko {
 		Client: cg.NewClient(&http.Client{
 			Timeout: time.Second * 10,
 		}),
-		VsCurrencies: make(ConversionDictionary),
-		Coins:        make(CoinsMap),
+		VsCurrencies: &DictionaryConversion{
+			Data: make(ConversionDictionary),
+		},
+		Coins: &DictionaryCoins{
+			Data: make(CoinsMap),
+		},
 	}
 }
 
@@ -53,9 +56,10 @@ func (c *Coingecko) Setup(wg *sync.WaitGroup) {
 }
 
 func (c *Coingecko) CreateTickers() {
-	c.TickerDictonary = time.NewTicker(time.Duration(DictionaryInterval) * time.Minute)
+	c.Ticker = time.NewTicker(time.Duration(DictionaryInterval) * time.Minute)
 	go func() {
-		for range c.TickerDictonary.C {
+		defer c.Ticker.Stop()
+		for range c.Ticker.C {
 			ping, err := c.Ping()
 			if err != nil {
 				logInfo.Printf(err.Error())
@@ -91,7 +95,7 @@ func (c *Coingecko) UpdateCoins() error {
 			Name:   value.Name,
 		}
 	}
-	c.Coins = dictonary
+	c.Coins.Swap(dictonary)
 	logInfo.Printf("Coins dictonary is updated, len - %d \n", len(dictonary))
 	return nil
 }
@@ -106,19 +110,19 @@ func (c *Coingecko) UpdateConvertiesDictionary() error {
 	for _, value := range *converties {
 		dictonary[strings.ToUpper(value)] = value
 	}
-	c.VsCurrencies = dictonary
+	c.VsCurrencies.Swap(dictonary)
 	logInfo.Printf("VsCurrencies dictonary is updated, len - %d \n", len(dictonary))
 	return nil
 }
 
 func (c *Coingecko) GetPrice(name, convert string) (float32, error) {
-	name_id, ok := c.Coins[name]
+	name_id, ok := c.Coins.Get(name)
 	if !ok {
 		return 0.0, &GKError{
 			Err: fmt.Errorf("Not found in Coins dictionary (Coingecko doesn't have this currency) - %s", name),
 		}
 	}
-	convert_id, ok := c.VsCurrencies[convert]
+	convert_id, ok := c.VsCurrencies.Get(convert)
 	if !ok {
 		return 0.0, &GKError{
 			Err: fmt.Errorf("Not found in VsCurrencies dictionary (Coingecko doesn't have this currency or can't convert) - %s", convert),
@@ -140,7 +144,7 @@ func (c *Coingecko) GetPricesInGroups(names, conversts []string) (PricesMap, err
 	converts_ids := []string{}
 	names_ids := []string{}
 	for _, value := range names {
-		id, ok := c.Coins[value]
+		id, ok := c.Coins.Get(value)
 		if !ok {
 			return prices, &GKError{
 				Err: fmt.Errorf("Not found in Coins dictionary (Coingecko doesn't have this currency) - %s", value),
@@ -150,7 +154,7 @@ func (c *Coingecko) GetPricesInGroups(names, conversts []string) (PricesMap, err
 		names_ids = append(names_ids, id.ID)
 	}
 	for _, value := range conversts {
-		id, ok := c.VsCurrencies[value]
+		id, ok := c.VsCurrencies.Get(value)
 		if !ok {
 			return prices, &GKError{
 				Err: fmt.Errorf("Not found in VsCurrencies dictionary (Coingecko doesn't have this currency or can't convert) - %s", value),

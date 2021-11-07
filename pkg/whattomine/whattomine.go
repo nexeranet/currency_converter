@@ -11,7 +11,7 @@ import (
 
 const (
 	packageName    string = "WHATTOMINEAPI"
-	MinuteInterval int    = 5
+	MinuteInterval int    = 1
 	URL            string = "https://whattomine.com"
 )
 
@@ -20,7 +20,7 @@ var logInfo = log.New(os.Stdout, fmt.Sprintf("%s\t", packageName), log.Ldate|log
 type WhatToMineApi struct {
 	Client     *http.Client
 	Url        string
-	Dictionary CalculatorsMap
+	Dictionary *Dictionary
 	Ticker     *time.Ticker
 }
 
@@ -30,7 +30,9 @@ func NewWhatToMineApi() *WhatToMineApi {
 		Client: &http.Client{
 			Timeout: 6 * time.Second,
 		},
-		Dictionary: make(CalculatorsMap),
+		Dictionary: &Dictionary{
+			Data: make(CalculatorsMap),
+		},
 	}
 }
 
@@ -38,7 +40,7 @@ func (w *WhatToMineApi) Setup(wg *sync.WaitGroup) {
 	defer wg.Done()
 	err := w.UpdateDictionary()
 	if err != nil {
-		logInfo.Println("Error: ")
+		logInfo.Println("Error: ", err.Error())
 		return
 	}
 }
@@ -46,6 +48,7 @@ func (w *WhatToMineApi) Setup(wg *sync.WaitGroup) {
 func (w *WhatToMineApi) CreateTickers() {
 	w.Ticker = time.NewTicker(time.Duration(MinuteInterval) * time.Minute)
 	go func() {
+		defer w.Ticker.Stop()
 		for range w.Ticker.C {
 			err := w.UpdateDictionary()
 			if err != nil {
@@ -54,10 +57,6 @@ func (w *WhatToMineApi) CreateTickers() {
 			}
 		}
 	}()
-}
-
-func (w *WhatToMineApi) SetDictionary(dictionary CalculatorsMap) {
-	w.Dictionary = dictionary
 }
 
 func (w *WhatToMineApi) UpdateDictionary() error {
@@ -73,13 +72,13 @@ func (w *WhatToMineApi) UpdateDictionary() error {
 		dictionary[value.Tag] = value
 	}
 	logInfo.Printf("Dictionary length - %d", len(dictionary))
-	w.SetDictionary(dictionary)
+	w.Dictionary.Swap(dictionary)
 	return nil
 }
 
 func (w *WhatToMineApi) GetCoinByTag(tag string) (Coin, error) {
 	var result Coin
-	calc, ok := w.Dictionary[tag]
+	calc, ok := w.Dictionary.Get(tag)
 	if !ok {
 		return result, fmt.Errorf("Not found in whotomine dictionary - %s", tag)
 	}
