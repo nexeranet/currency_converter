@@ -9,7 +9,7 @@
 ## Resurses
 Coingecko [link](https://www.coingecko.com/ru/api/documentation) - 100 requests/minute   
 Whattomine [link](https://whattomine.com/coins)  - 80 requests/minute   
-## Usagek
+## Usage
 For usage, checkout [Example folder](https://github.com/nexeranet/currency_converter/tree/main/examples)
 ```go
 package main
