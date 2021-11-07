@@ -107,10 +107,6 @@ func (w *WhatToMineApi) FindCoinByTag(tag string) (Coin, error) {
 	return coin, nil
 }
 
-func (w *WhatToMineApi) GetNetInfo(tag string) (Coin, error) {
-	return w.GetCoinByTag(tag)
-}
-
 func (w *WhatToMineApi) GetCoinByTag(tag string) (Coin, error) {
 	var result Coin
 	calc, ok := w.Dictionary[tag]

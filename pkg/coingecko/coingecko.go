@@ -29,11 +29,10 @@ type Coingecko struct {
 }
 
 func NewCoingecko() *Coingecko {
-	httpClient := &http.Client{
-		Timeout: time.Second * 10,
-	}
 	return &Coingecko{
-		Client:       cg.NewClient(httpClient),
+		Client: cg.NewClient(&http.Client{
+			Timeout: time.Second * 10,
+		}),
 		VsCurrencies: make(ConversionDictionary),
 		Coins:        make(CoinsMap),
 	}

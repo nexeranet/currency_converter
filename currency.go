@@ -34,27 +34,22 @@ func (c *Converter) Setup() {
 	go c.CoingeckoApi.Setup(&wg)
 	go c.WhattomineApi.Setup(&wg)
 	wg.Wait()
+	fmt.Println("###################\t Setup is done \t##########################")
+}
+
+func (c *Converter) CreateTickers() {
 	c.WhattomineApi.CreateTickers()
 	c.CoingeckoApi.CreateTickers()
-	fmt.Println("###################\t Setup is done \t##########################")
 }
 
 // WHATTOMINEAPI
 func (c *Converter) GetNetInfo(tag string) (whattomine.Coin, error) {
-	return c.WhattomineApi.GetNetInfo(tag)
+	return c.WhattomineApi.GetCoinByTag(tag)
 }
 
-// func (c *Converter) GetWhattomineCalculators() (whattomine.Calculators, error) {
-// return c.WhattomineApi.GetCalculators()
-// }
-//
-// func (c *Converter) GetWhattomineCoins() (whattomine.Coins, error) {
-// return c.WhattomineApi.GetCoins()
-// }
-//
-// func (c *Converter) GetWhattomineCoinById(id int) (whattomine.Coin, error) {
-// return c.WhattomineApi.GetCoinById(id)
-// }
+func (c *Converter) GetWTCoin(tag string) (whattomine.Coin, error) {
+	return c.WhattomineApi.GetCoinByTag(tag)
+}
 
 // COINGECKOAPI
 
