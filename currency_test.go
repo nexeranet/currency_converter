@@ -1,3 +1,9 @@
+/*
+
+ATTENTION!
+Setup() function needs 2 requests to Coingecko and one to Whattomine
+
+*/
 package currency_converter
 
 import (
