@@ -10,7 +10,7 @@
 Coingecko [link](https://www.coingecko.com/ru/api/documentation) - 100 requests/minute   
 Whattomine [link](https://whattomine.com/coins)  - 80 requests/minute   
 ## Usage
-For usage, checkout [Example folder](https://github.com/nexeranet/currency_converter/tree/main/examples)
+For usage, checkout [Example folder](https://github.com/nexeranet/currency_converter/tree/main/_examples)
 ```go
 package main
 
