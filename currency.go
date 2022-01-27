@@ -55,6 +55,10 @@ func (c *Converter) GetWTCoin(tag string) (whattomine.Coin, error) {
 	return c.WhattomineApi.GetCoinByTag(tag)
 }
 
+func (c *Converter) GetNetInfoWithParams(tag string, config WTMineParams) (whattomine.Coin, error) {
+	return c.WhattomineApi.GetCoinByTagWithCalculate(tag, config.Query())
+}
+
 // COINGECKOAPI
 
 func (c *Converter) GetPrice(name, convert_name string) (float32, error) {

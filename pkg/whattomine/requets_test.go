@@ -125,7 +125,7 @@ func TestGetCoinById(t *testing.T) {
 		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
 			tt.setup()
-			actualRes, actualErr := API.GetCoinById(tt.input.id)
+			actualRes, actualErr := API.GetCoinById(tt.input.id, "")
 			if (actualErr != nil) != tt.output.withErr {
 				t.Fatalf("expected error %t, actual %s", tt.output.withErr, actualErr)
 			}

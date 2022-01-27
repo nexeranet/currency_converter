@@ -82,7 +82,20 @@ func (w *WhatToMineApi) GetCoinByTag(tag string) (Coin, error) {
 	if !ok {
 		return result, fmt.Errorf("Not found in whotomine dictionary - %s", tag)
 	}
-	coin, err := w.GetCoinById(calc.Id)
+	coin, err := w.GetCoinById(calc.Id, "")
+	if err != nil {
+		return result, err
+	}
+	return coin, nil
+}
+
+func (w *WhatToMineApi) GetCoinByTagWithCalculate(tag, query string) (Coin, error) {
+	var result Coin
+	calc, ok := w.Dictionary.Get(tag)
+	if !ok {
+		return result, fmt.Errorf("Not found in whotomine dictionary - %s", tag)
+	}
+	coin, err := w.GetCoinById(calc.Id, query)
 	if err != nil {
 		return result, err
 	}

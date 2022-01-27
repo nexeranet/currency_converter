@@ -7,9 +7,12 @@ import (
 	"net/http"
 )
 
-func (w *WhatToMineApi) GetCoinById(id int) (Coin, error) {
+func (w *WhatToMineApi) GetCoinById(id int, queryString string) (Coin, error) {
 	var con Coin
-	res, err := w.Get(fmt.Sprintf("coins/%d.json", id))
+	if queryString != "" {
+		queryString = fmt.Sprintf("?%s", queryString)
+	}
+	res, err := w.Get(fmt.Sprintf("coins/%d.json%s", id, queryString))
 	if err != nil {
 		return con, err
 	}
