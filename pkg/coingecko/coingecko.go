@@ -19,6 +19,18 @@ const (
 )
 
 var logInfo = log.New(os.Stdout, fmt.Sprintf("%s\t", packageName), log.Ldate|log.Ltime|log.Lshortfile)
+var blockedCoins []string = []string{
+	"ethereum-wormhole",
+}
+
+func isBlockedCoin(coinId string) bool {
+	for _, value := range blockedCoins {
+		if coinId == value {
+			return true
+		}
+	}
+	return false
+}
 
 type Coingecko struct {
 	VsCurrencies *DictionaryConversion
@@ -89,6 +101,9 @@ func (c *Coingecko) UpdateCoins() error {
 	}
 	dictonary := make(CoinsMap)
 	for _, value := range *coins {
+		if isBlockedCoin(value.ID) {
+			continue
+		}
 		dictonary[strings.ToUpper(value.Symbol)] = Coin{
 			ID:     value.ID,
 			Symbol: value.Symbol,
