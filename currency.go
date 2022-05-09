@@ -21,10 +21,14 @@ type Converter struct {
 	CoingeckoApi  *coingecko.Coingecko
 }
 
-func NewConverter() *Converter {
+func NewConverter(flags ...bool) *Converter {
+	debug := false
+	if len(flags) > 0 {
+		debug = flags[0]
+	}
 	return &Converter{
-		WhattomineApi: whattomine.NewWhatToMineApi(),
-		CoingeckoApi:  coingecko.NewCoingecko(),
+		WhattomineApi: whattomine.NewWhatToMineApi(debug),
+		CoingeckoApi:  coingecko.NewCoingecko(debug),
 	}
 }
 

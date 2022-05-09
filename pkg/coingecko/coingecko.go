@@ -2,6 +2,7 @@ package coingecko
 
 import (
 	"fmt"
+	"io/ioutil"
 	"log"
 	"net/http"
 	"os"
@@ -39,7 +40,10 @@ type Coingecko struct {
 	Ticker       *time.Ticker
 }
 
-func NewCoingecko() *Coingecko {
+func NewCoingecko(isDebug bool) *Coingecko {
+	if isDebug {
+		logInfo.SetOutput(ioutil.Discard)
+	}
 	return &Coingecko{
 		Client: cg.NewClient(&http.Client{
 			Timeout: time.Second * 10,

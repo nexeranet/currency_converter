@@ -2,6 +2,7 @@ package whattomine
 
 import (
 	"fmt"
+	"io/ioutil"
 	"log"
 	"net/http"
 	"os"
@@ -24,7 +25,10 @@ type WhatToMineApi struct {
 	Ticker     *time.Ticker
 }
 
-func NewWhatToMineApi() *WhatToMineApi {
+func NewWhatToMineApi(isDebug bool) *WhatToMineApi {
+	if isDebug {
+		logInfo.SetOutput(ioutil.Discard)
+	}
 	return &WhatToMineApi{
 		Url: URL,
 		Client: &http.Client{

@@ -18,7 +18,7 @@ import (
 	"github.com/nexeranet/currency_converter/pkg/whattomine"
 )
 
-var API = NewConverter()
+var API = NewConverter(true)
 var COINGECKOAPI = "https://api.coingecko.com/api/v3"
 var WHATTOMINEAPI = "https://whattomine.com"
 var setUpIsDone = false
