@@ -9,7 +9,7 @@ import (
 	"gopkg.in/h2non/gock.v1"
 )
 
-var API = NewWhatToMineApi()
+var API = NewWhatToMineApi(false)
 
 func Cleanup(t *testing.T) {
 	t.Cleanup(func() {
